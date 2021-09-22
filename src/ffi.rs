@@ -12,7 +12,7 @@
 use super::errors::Error;
 use super::{install as rust_install, open as rust_open, App};
 use ffi_utils::{
-    catch_unwind_cb, from_c_str, vec_clone_from_raw_parts, ErrorCode, FfiResult, FFI_RESULT_OK,
+    catch_unwind_cb, vec_clone_from_raw_parts, ErrorCode, FfiResult, FFI_RESULT_OK,
 };
 
 use libc::c_char;
@@ -27,7 +27,7 @@ pub unsafe extern "C" fn open_uri(
     o_cb: extern "C" fn(*mut c_void, *const FfiResult),
 ) {
     catch_unwind_cb(user_data, o_cb, || -> Result<(), Error> {
-        let uri = from_c_str(uri)?;
+        let uri = CStr::from_ptr(uri).to_str()?.to_owned();
         rust_open(uri)?;
         o_cb(user_data, FFI_RESULT_OK);
         Ok(())
@@ -56,14 +56,14 @@ pub unsafe extern "C" fn install(
             exec.push_str(&arg_str);
         }
         let app = App::new(
-            from_c_str(bundle)?,
-            from_c_str(vendor)?,
-            from_c_str(name)?,
+            CStr::from_ptr(bundle).to_str()?.to_owned(),
+            CStr::from_ptr(vendor).to_str()?.to_owned(),
+            CStr::from_ptr(name).to_str()?.to_owned(),
             exec.trim_end().to_owned(),
-            Some(from_c_str(icon)?),
+            Some(CStr::from_ptr(icon).to_str()?.to_owned()),
         );
 
-        let schemes_str = from_c_str(schemes)?;
+        let schemes_str = CStr::from_ptr(schemes).to_str()?.to_owned();
 
         rust_install(
             &app,

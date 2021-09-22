@@ -22,21 +22,18 @@
 // inspired by
 // https://github.
 // com/feross/webtorrent-desktop/blob/4bb2056bc9c1a421815b97d03ffed512575dfde0/src/main/handlers.js
-#![forbid(
-    exceeding_bitshifts,
+#![deny(
+    arithmetic_overflow,
     mutable_transmutes,
     no_mangle_const_items,
     unknown_crate_types,
-    warnings
-)]
-#![deny(
+    warnings,
     bad_style,
     deprecated,
     improper_ctypes,
     missing_docs,
     non_shorthand_field_patterns,
     overflowing_literals,
-    plugin_as_library,
     stable_features,
     unconditional_recursion,
     unknown_lints,
@@ -82,6 +79,7 @@ pub use crate::app::App;
 
 mod errors {
     use ffi_utils::StringError;
+    use std::fmt::Debug;
     use std::io;
     use std::str::Utf8Error;
 
@@ -103,7 +101,7 @@ mod errors {
             }
             /// Utf-8 error.
             Utf8Error(error: Utf8Error) {
-                description(error.description())
+                description(format!("{}", error))
                 display("Utf-8 error: {}", error)
                 from()
             }

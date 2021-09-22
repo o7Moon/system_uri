@@ -8,26 +8,26 @@ name = "system_uri"
 readme = "README.md"
 repository = "https://github.com/maidsafe/system_uri"
 version = "0.4.0"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-quick-error = "~1.2.2"
-ffi_utils = { version = "~0.8.0", optional = true }
-libc  = { version = "~0.2.33", optional = true }
+quick-error = "~1.2"
+ffi_utils = { version = "~0.17", optional = true }
+libc  = { version = "~0.2", optional = true }
 
 [dev-dependencies]
-rand = "~0.3.18"
-unwrap = "~1.2.0"
+rand = "~0.8"
+unwrap = "~1.2"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-winreg = "~0.4.0"
-winapi = "~0.2.8"
+winreg = "~0.10"
+winapi = "~0.3"
 
 [target.'cfg(target_os = "linux")'.dependencies]
-xdg-basedir = "~1.0.0"
+xdg-basedir = "~1.0"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-libc = "~0.2.33"
+libc = "~0.2"
 
 [lib]
 crate_type = ["staticlib", "rlib", "cdylib"]
